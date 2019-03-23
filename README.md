@@ -1,6 +1,9 @@
 # react-address-picker-cc
 
-> 仿京东移动端地址选择组件 mobile/pc address picker component 
+*  仿京东移动端地址选择组件
+*  适配触屏和PC
+*  有异步获取收货地址的方法
+
 
 [![NPM](https://img.shields.io/npm/v/react-address-picker-cc.svg)](https://www.npmjs.com/package/react-address-picker-cc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -11,6 +14,13 @@
 
 ```bash
 npm install --save react-address-picker-cc
+```
+
+## Example
+
+```
+cd examples
+npm start
 ```
 
 ## Usage
