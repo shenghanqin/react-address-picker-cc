@@ -40,7 +40,6 @@ export default class Sync extends Component {
   }
 
   showPicker = () => {
-    console.log('123 :', 123);
     this.ecRef.show()
   }
 
