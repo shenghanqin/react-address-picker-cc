@@ -1,35 +1,39 @@
 .rap-address-picker {
-    border-radius: 3px 3px 0 0
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.2s;
+	animation: zindexdown .3s forwards;
+	border-radius: 3px 3px 0 0
 }
 
-.rap-address-picker .rap-dialog-main {
-    padding: 13px 0;
-    bottom: 0;
-    height: 70%
+.rap-address-picker-visible {
+	animation: zindexup .3s forwards;
+	background: rgba(0, 0, 0, .2);
+	height: 100%;
+	opacity: 1;
+	overflow: hidden;
 }
 
-.rap-address-picker .rap-dialog-close {
-    right: auto;
+.rap-address-picker-modal {
+	transition: transform 0.3s;
+    position: absolute;
     left: 0;
-    top: 0;
-    width: 38px;
-    height: 46px;
-    background: url(https://n1image.hjfile.cn/res7/2019/03/04/ae137ed94bf5c656b8c14c56ec24f24b.png) 50% no-repeat;
-    cursor: pointer;
-    background-size: 16px
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    height: 70%;
+    transform: translate3d(0, 100%, 0);
+    display: flex;
+    flex-direction: column;
 }
 
-.rap-address-picker .rap-dialog-close:after,.rap-address-picker .rap-dialog-close:before {
-    display: none
+.rap-address-picker-visible .rap-address-picker-modal {
+	transform: translate3d(0, 0, 0);
 }
-
-@media (min-width: 769px) {
-    .rap-address-picker .rap-dialog-close {
-        left:50%;
-        margin-left: -396px
-    }
-}
-
 .rap-address-picker-title {
     font-size: 17px;
     padding-bottom: 12px;
@@ -237,4 +241,36 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg)
+}
+
+@keyframes zindexdown {
+  0% {
+    z-index: 999;
+  }
+  to {
+    z-index: -1;
+  }
+}
+
+@keyframes zindexup {
+  0% {
+    z-index: -1;
+  }
+  to {
+    z-index: 999;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    background: transparent;
+  }
+  80% {
+    opacity: .2;
+  }
+  to {
+    opacity: 1;
+    background: @activeColor;
+  }
 }

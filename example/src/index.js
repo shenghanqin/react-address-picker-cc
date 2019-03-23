@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 
 import './index.css'
-import App from './App'
+import Sync from './Sync'
+import Async from './Async';
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<Fragment>
+  <Sync />
+  <Async />
+</Fragment>, document.getElementById('root'))

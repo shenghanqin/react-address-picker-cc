@@ -93,21 +93,19 @@ export default class AddressPicker extends React.PureComponent {
     }
 
     return null
-
   }
 
   pickerStatusChange = (show) => {
     if (show) {
       this.doAnimation()
-      // this.bindEvent()
+      this.bindEvent()
     }
     this.props.pickerStatusChange(show)
   }
 
-  // 因为 react-locky 对touchmove有影响，暂时取消touchmove效果
-  // componentWillUnmount() {
-  //   this.unBindEvent()
-  // }
+  componentWillUnmount() {
+    this.unBindEvent()
+  }
 
   componentDidUpdate(prevProps, prevState) {
     const { show, asyncIdOneFromProps } = this.state
@@ -262,8 +260,6 @@ export default class AddressPicker extends React.PureComponent {
     })
   }
 
-
-
   onSelectedRow = (item, level) => () => {
     const { currentLevel } = this.state
     let { selectedRows } = this.state
@@ -356,39 +352,34 @@ export default class AddressPicker extends React.PureComponent {
     }
 
     let node = (
-      <div
-        {...this.props}
-        animation='slide-down'
-        visible={show}
-        onClose={this.hide}
-        className={cx(`${PICKER_CLASSNAME} ${className}`)}
-      // useModal={true}
-      >
-        <div className={`${PICKER_CLASSNAME}-main-wrap`} ref={w => (this.mainWrapRef = w)}>
-          <div className={`${PICKER_CLASSNAME}-title`}>
-            {title}
-          </div>
-          <div className={`${PICKER_CLASSNAME}-nav`}>
-            <div className={`${PICKER_CLASSNAME}-nav-list`} ref={nav => (this.nav = nav)} onTouchMove={this.onNavBarMove}>
-              {
-                selectedRows.map((item, index) => (
-                  <div key={index}
-                    onClick={this.onSelectedNav(index)}
-                    id={`nav-item-${index}`}
-                    className={`${PICKER_CLASSNAME}-nav-item`}
-                  >
-                    {item.id ? item.areaName : navTips}
-                  </div>
-                ))
-              }
+      <div className={cx(`${PICKER_CLASSNAME} ${className}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
+        <div className={`${PICKER_CLASSNAME}-modal`}>
+          <div className={`${PICKER_CLASSNAME}-main-wrap`} ref={w => (this.mainWrapRef = w)}>
+            <div className={`${PICKER_CLASSNAME}-title`}>
+              {title}
             </div>
-            <span className={`${PICKER_CLASSNAME}-nav-active`} ref={navline => (this.navLineRef = navline)} />
-          </div>
-          <div className={`${PICKER_CLASSNAME}-body`}>
-            <div className={`${PICKER_CLASSNAME}-body-wrap`} ref={wrap => (this.listWrapRef = wrap)} style={wrapStyles}>
-              {
-                selectedRows.map((item, index) => this.renderNextData(dataSource, index))
-              }
+            <div className={`${PICKER_CLASSNAME}-nav`}>
+              <div className={`${PICKER_CLASSNAME}-nav-list`} ref={nav => (this.nav = nav)} onTouchMove={this.onNavBarMove}>
+                {
+                  selectedRows.map((item, index) => (
+                    <div key={index}
+                      onClick={this.onSelectedNav(index)}
+                      id={`nav-item-${index}`}
+                      className={`${PICKER_CLASSNAME}-nav-item`}
+                    >
+                      {item.id ? item.areaName : navTips}
+                    </div>
+                  ))
+                }
+              </div>
+              <span className={`${PICKER_CLASSNAME}-nav-active`} ref={navline => (this.navLineRef = navline)} />
+            </div>
+            <div className={`${PICKER_CLASSNAME}-body`}>
+              <div className={`${PICKER_CLASSNAME}-body-wrap`} ref={wrap => (this.listWrapRef = wrap)} style={wrapStyles}>
+                {
+                  selectedRows.map((item, index) => this.renderNextData(dataSource, index))
+                }
+              </div>
             </div>
           </div>
         </div>
@@ -424,17 +415,17 @@ AddressPicker.propTypes = {
    */
   navTips: PropTypes.string,
   /**
-   * 异步数据返回的一级id
+   * 初始化地址的id数组
+   */
+  selectedIdList: PropTypes.array,
+  /**
+   * 是否异步获取数据
    */
   isAsyncData: PropTypes.bool,
   /**
    * 异步数据返回的一级id
    */
   asyncIdOne: PropTypes.number,
-  /**
-   * 初始化地址的id数组
-   */
-  selectedIdList: PropTypes.array,
   /**
    * 初始化地址的id数组
    */
