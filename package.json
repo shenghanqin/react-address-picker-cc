@@ -1,7 +1,14 @@
 {
   "name": "react-address-picker-cc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "仿京东移动端地址选择组件 mobile/pc address picker component ",
+  "keywords": [
+    "react",
+    "react-component",
+    "address",
+    "picker",
+    "address-picker"
+  ],
   "author": "https://github.com/shenghanqin/",
   "license": "MIT",
   "repository": "https://github.com/shenghanqin/react-address-picker.git",
