@@ -42,6 +42,10 @@ export default class Sync extends Component {
   showPicker = () => {
     this.ecRef.show()
   }
+  
+  hidePicker = () => {
+    this.ecRef.hide()
+  }
 
   onAddressChange = (selectedRows) => {
     this.setState({
@@ -63,6 +67,7 @@ export default class Sync extends Component {
           text='这是收货地址组件'
           ref={e => (this.ecRef = e)}
           onAddressChange={this.onAddressChange}
+          onClose={this.hidePicker}
         />
       </div>
     )
