@@ -119,6 +119,7 @@ export default class AddressPickerAsyncExample extends Component {
           selectedIdList={selectedIdList}
           asyncIdOne={asyncIdOne}
           isAsyncData={true}
+          onClose={this.hidePicker}
         />
       </div>
     )

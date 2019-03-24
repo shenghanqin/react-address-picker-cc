@@ -48,8 +48,7 @@ export default class AddressPicker extends React.PureComponent {
 
   constructor(props) {
     super(props)
-    this.PREFIX = props.prefixCon || 'rap'
-    this.PICKER_CLASSNAME = this.PREFIX + '-address-picker'
+    this.PICKER_CLASSNAME = this.PREFIX + 'rap-address-picker'
     
     // 获取选中的选项
     const { currentLevel, selectedRows } = getSelectedRows(props)
@@ -339,10 +338,10 @@ export default class AddressPicker extends React.PureComponent {
 
   render() {
     const { selectedRows, show, currentLevel } = this.state
-    const { dataSource, navTips, title, className } = this.props
+    const { dataSource, navTips, title, className, onClose } = this.props
     // 这一条是不是不太好
     const wrapStyles = {
-      width: `${selectedRows.length * 100}%`,
+      width: `${selectedRows.length * 100}%`
     }
 
     if (selectedRows.length === 1) {
@@ -357,6 +356,7 @@ export default class AddressPicker extends React.PureComponent {
           <div className={`${PICKER_CLASSNAME}-main-wrap`} ref={w => (this.mainWrapRef = w)}>
             <div className={`${PICKER_CLASSNAME}-title`}>
               {title}
+              <div className={`${PICKER_CLASSNAME}-title-close`} onClick={onClose} />
             </div>
             <div className={`${PICKER_CLASSNAME}-nav`}>
               <div className={`${PICKER_CLASSNAME}-nav-list`} ref={nav => (this.nav = nav)} onTouchMove={this.onNavBarMove}>
@@ -405,11 +405,11 @@ AddressPicker.propTypes = {
   /**
    * 自定义 ClassName
    */
-  prefixCon: PropTypes.string,
-  /**
-   * 自定义 ClassName
-   */
   className: PropTypes.string,
+  /**
+   * 自定义 关闭方法
+   */
+  onClose: PropTypes.func,
   /**
    * 地址导航提示文字
    */
@@ -447,6 +447,7 @@ AddressPicker.defaultProps = {
   isAsyncData: false,
   asyncIdOne: 0,
   selectedIdList: [],
+  onClose: () => {},
   getOneLevelData: () => { },
   pickerStatusChange: () => { },
   onAddressChange: () => { }
