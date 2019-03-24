@@ -8,7 +8,7 @@
 [![NPM](https://img.shields.io/npm/v/react-address-picker-cc.svg)](https://www.npmjs.com/package/react-address-picker-cc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 
-![](https://ucarecdn.com/5f70fb25-ad96-4531-a91d-f6c879abfe0b/reactaddresspicker.gif)
+![](https://n1image.hjfile.cn/res7/2019/03/24/10ba8f07bc315b3a2bd735adf9b7a954.gif)
 
 ## Install
 
