@@ -330,7 +330,7 @@ export default class AddressPicker extends React.PureComponent {
               cx(`${PICKER_CLASSNAME}-body-item`, { active: row.id === item.id })
             }
             onClick={this.onSelectedRow(item, level)}
-          ><span>{item.areaName}</span><i /></div>
+          >{item.areaName}</div>
         ))}
       </div>
     )
