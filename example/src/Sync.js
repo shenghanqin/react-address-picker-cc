@@ -33,7 +33,7 @@ export default class Sync extends Component {
     return (
       <div>
         <h1>同步获取</h1>
-        <input onClick={this.showPicker} value={this.state.address} placeholder="请选择地区" readOnly style={{ width: '100%' }} />
+        <input onClick={this.showPicker} value={this.state.address} placeholder="请选择地区" readOnly style={{ width: '90%' }} />
         <AddressPicker 
           dataSource={dataSource}
           text='这是收货地址组件'

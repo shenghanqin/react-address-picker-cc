@@ -110,7 +110,7 @@ export default class AddressPickerAsyncExample extends Component {
     return (
       <div>
         <h1>异步获取数据</h1>
-        <input onClick={this.showPicker} value={this.state.address} placeholder="请选择收货地址" readOnly style={{ width: '100%' }} />
+        <input onClick={this.showPicker} value={this.state.address} placeholder="请选择收货地址" readOnly style={{ width: '90%' }} />
         <AddressPicker
           ref={picker => this.picker = picker}
           dataSource={dataSource}
