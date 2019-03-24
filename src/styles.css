@@ -187,7 +187,8 @@
     -webkit-transition-duration: .3s;
     transition-duration: .3s;
     -webkit-transition-timing-function: ease-in-out;
-    transition-timing-function: ease-in-out
+    transition-timing-function: ease-in-out;
+    will-change: transform;
 }
 
 .rap-address-picker-body-wrap ::-webkit-scrollbar {
@@ -257,7 +258,8 @@
     background: #f7f8fa
 }
 
-.rap-address-picker-body-item.active span+i {
+.rap-address-picker-body-item.active:after {
+    content: '';
     position: absolute;
     border-width: 0 2px 2px 0;
     border-style: solid;
