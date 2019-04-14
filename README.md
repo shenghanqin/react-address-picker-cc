@@ -1,14 +1,20 @@
 # react-address-picker-cc
 
+[![NPM](https://img.shields.io/npm/v/react-address-picker-cc.svg)](https://www.npmjs.com/package/react-address-picker-cc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 *  仿京东移动端地址选择组件
 *  适配触屏和PC
 *  有异步获取收货地址的方法
 
-
-[![NPM](https://img.shields.io/npm/v/react-address-picker-cc.svg)](https://www.npmjs.com/package/react-address-picker-cc) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
-
 ![](https://n1image.hjfile.cn/res7/2019/03/24/10ba8f07bc315b3a2bd735adf9b7a954.gif)
+
+
+近期修改计划
+
+- [ ] 增加dialog的mask遮罩层，提供点击mask关闭的方法
+- [ ] 尝试添加“规避滚动穿透”，如 `react-locky` 上提供的效果
+- [ ] 尝试添加单元测试用例
+
 
 ## Install
 
