@@ -23,12 +23,17 @@ interface AddressProps {
    */
   className?: string | string[] | { [key: string]: boolean }
 
+  
   /**
    * 自定义Style
    * 
    * @type {(string | React.CSSProperties)}
    */
   customStyle?: string | React.CSSProperties
+  /**
+   * 主题
+   */
+  theme?: '' | 'theme-light' |'theme-dark' | string
   /**
    * TODO 数据源，多维数组
    */
@@ -446,7 +451,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
   render() {
     const { selectedRows, show, currentLevel } = this.state
-    const { dataSource, navTips, title, className, onClose } = this.props
+    const { dataSource, navTips, title, className, theme, onClose } = this.props
 
     // 这一条是不是不太好
     const wrapStyles: React.CSSProperties = {
@@ -460,7 +465,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
 
     let node = (
-      <div className={cx(`${PICKER_CLASSNAME} ${className}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
+      <div className={cx(`${PICKER_CLASSNAME} ${className} ${theme}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
         <div className={`${PICKER_CLASSNAME}-modal`}>
           <div className={`${PICKER_CLASSNAME}-main-wrap`} ref={w => (this.mainWrapRef = w)}>
             <div className={`${PICKER_CLASSNAME}-title`}>
@@ -517,6 +522,10 @@ AddressPicker.propTypes = {
    */
   className: PropTypes.string,
   /**
+   * 主题
+   */
+  theme: PropTypes.string,
+  /**
    * 自定义样式
    */
   customStyle: PropTypes.object,
@@ -536,10 +545,6 @@ AddressPicker.propTypes = {
    * 自定义 关闭方法
    */
   onClose: () => {},
-  // /**
-  //  * 异步数据返回的一级id
-  //  */
-  // asyncIdOne: PropTypes.number,
   /**
    * 初始化地址的id数组
    */
@@ -559,8 +564,8 @@ AddressPicker.defaultProps = {
   navTips: '请选择',
   title: '选择地址',
   className: '',
+  theme: '',
   isAsyncData: false,
-  asyncIdOne: 0,
   selectedIdList: [],
   onClose: () => { },
   getOneLevelData: () => { },

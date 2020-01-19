@@ -116,7 +116,7 @@ export default class AddressPickerAsyncExample extends Component {
   }
 
   render() {
-    const { dataSource, selectedIdList, asyncIdOne, isLoadingData } = this.state
+    const { dataSource, selectedIdList, isLoadingData } = this.state
     // console.log('render ouer :', dataSource);
     return (
       <div>
@@ -130,8 +130,8 @@ export default class AddressPickerAsyncExample extends Component {
               onAddressChange={this.onAddressChange}
               getOneLevelData={this.getOneLevelData}
               selectedIdList={selectedIdList}
-              asyncIdOne={asyncIdOne}
               isAsyncData={true}
+              theme='theme-dark'
               onClose={this.hidePicker}
             />
           )

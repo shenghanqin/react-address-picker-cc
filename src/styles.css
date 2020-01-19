@@ -1,3 +1,11 @@
+:root {
+  --rap-dialog-bg: #fff;
+  --rap-dialog-one-text:#2f3742;
+  --rap-dialog-one-active:#2f5aff;
+  --rap-dialog-one-bg-active:var(--rap-dialog-one-bg-active);
+}
+
+
 .rap-address-picker {
   position: fixed;
   top: 0;
@@ -23,7 +31,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  background: #fff;
+  background: var(--rap-dialog-bg);
   height: 70%;
   transform: translate3d(0, 100%, 0);
   display: flex;
@@ -39,8 +47,8 @@
   padding-top: 10px;
   padding-bottom: 12px;
   margin-bottom: 6px;
-  border-bottom: 1px solid #f7f8fa;
-  color: #2f3742;
+  border-bottom: 1px solid var(--rap-dialog-one-bg-active);
+  color: var(--rap-dialog-one-text);
   text-align: center;
   -webkit-user-select: none;
   user-select: none
@@ -94,7 +102,7 @@
   left: 0;
   bottom: 0;
   height: 1px;
-  background: #2f5aff;
+  background: var(--rap-dialog-one-active);
   -webkit-transition: left .3s ease-in;
   transition: left .3s ease-in;
   width: 50px
@@ -112,7 +120,7 @@
   right: 20px;
   position: absolute;
   bottom: 0;
-  background-color: #f7f8fa;
+  background-color: var(--rap-dialog-one-bg-active);
   -webkit-transform: scaleY(.5);
   -ms-transform: scaleY(.5);
   transform: scaleY(.5)
@@ -124,7 +132,7 @@
   padding: 7px 0;
   text-align: center;
   font-size: 14px;
-  color: #2f3742;
+  color: var(--rap-dialog-one-text);
   margin-left: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -157,11 +165,11 @@
 }
 
 .rap-address-picker-nav-item.active {
-  color: #2f5aff
+  color: var(--rap-dialog-one-active)
 }
 
 .rap-address-picker-nav-item.active:before {
-  background: #2f5aff
+  background: var(--rap-dialog-one-active)
 }
 
 .rap-address-picker-body {
@@ -248,13 +256,13 @@
   white-space: nowrap;
   -webkit-user-select: none;
   user-select: none;
-  color: #2f3742;
+  color: var(--rap-dialog-one-text);
   cursor: pointer
 }
 
 .rap-address-picker-body-item.active {
-  color: #2f5aff;
-  background: #f7f8fa
+  color: var(--rap-dialog-one-active);
+  background: var(--rap-dialog-one-bg-active)
 }
 
 .rap-address-picker-body-item.active:after {
@@ -299,7 +307,13 @@
   }
   to {
     opacity: 1;
-    background: #2F5AFF;
+    background: var(--rap-dialog-one-active);
   }
 }
 
+
+.rap-address-picker.theme-dark {
+  --rap-dialog-bg: #0E1226;
+  --rap-dialog-one-text: #ffffff;
+  --rap-dialog-one-bg-active: rgba(255,255,255,.06);
+}
