@@ -79,9 +79,6 @@ interface AddressState {
   show: boolean
   touch: TouchProps
 }
-// interface selectedIdListProps {
-//   id: 123
-// }
 
 export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: any, dataSource : any }): any => {
   const selectedRows: any = []
@@ -132,6 +129,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     
     // 获取选中的选项
     const { currentLevel, selectedRows } = getSelectedRows(props)
+    console.log('selectedRows :', selectedRows, currentLevel);
     this.state = {
       // 异步加载二级后，从props中获取一级的省id
       asyncIdOneFromProps: 0,
@@ -149,14 +147,14 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
   pickerStatusChange = (show: boolean) => {
     if (show) {
-      // this.doAnimation()
-      // this.bindEvent()
+      this.doAnimation()
+      this.bindEvent()
     }
     // this.props.pickerStatusChange(show)
   }
 
   componentWillUnmount() {
-    // this.unBindEvent()
+    this.unBindEvent()
   }
 
   componentDidUpdate(prevProps: AddressProps, prevState: AddressState) {
@@ -167,7 +165,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       prevState.currentLevel !== this.state.currentLevel
       || (this.state.currentLevel === 1 && asyncIdOneFromProps > 0)
     )) {
-      // this.doAnimation()
+      this.doAnimation()
     }
   }
 
@@ -406,6 +404,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       wrapStyles.transform = `translate3d(-${(currentLevel / selectedRows.length) * 100}%, 0, 0)`
     }
 
+    console.log('selectedRows :', selectedRows);
+
     let node = (
       <div className={cx(`${PICKER_CLASSNAME} ${className}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
         <div className={`${PICKER_CLASSNAME}-modal`}>
@@ -501,6 +501,16 @@ AddressPicker.propTypes = {
   pickerStatusChange: () => {}
 }
 
-
-
-
+AddressPicker.defaultProps = {
+  dataSource: [],
+  navTips: '请选择',
+  title: '选择地址',
+  className: '',
+  isAsyncData: false,
+  asyncIdOne: 0,
+  selectedIdList: [],
+  onClose: () => { },
+  getOneLevelData: () => { },
+  pickerStatusChange: () => { },
+  onAddressChange: () => { }
+}
