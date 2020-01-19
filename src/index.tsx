@@ -56,9 +56,9 @@ interface AddressProps {
   /**
    * 异步数据返回的一级id
    */
-  asyncIdOne: number,
   /**
    * 初始化地址的id数组
+   * 返回值 Promise{asyncIdOne: number, dataSource: IOneRowProps[]}
    */
   getOneLevelData: (item: IOneRowProps, level: number) => any,
   /**
