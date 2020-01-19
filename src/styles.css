@@ -1,4 +1,4 @@
-/* .rap-address-picker {
+.rap-address-picker {
   position: fixed;
   top: 0;
   left: 0;
@@ -300,16 +300,7 @@
   }
   to {
     opacity: 1;
-    background: @activeColor;
+    background: #2F5AFF;
   }
-} */
-
-
-/* add css styles here (optional) */
-
-.test {
-  display: inline-block;
-  margin: 2em auto;
-  border: 2px solid #000;
-  font-size: 2em;
 }
+
