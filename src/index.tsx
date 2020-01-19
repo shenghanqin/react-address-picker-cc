@@ -81,7 +81,7 @@ interface TouchProps {
 
 interface AddressState {
   asyncIdOneFromProps: number
-  selectedRows: IOneRowProps[]
+  selectedRows: any //IOneRowProps[]
   currentLevel: number
   show: boolean
   touch: TouchProps
@@ -91,7 +91,7 @@ export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList
   const selectedRows: IOneRowProps[] = []
   if (selectedIdList && dataSource && selectedIdList.length) {
     const loop = (ds: any, level: number) => {
-      console.log('ds :', ds);
+
       const v = selectedIdList[level]
       const rows = ds.filter((item: any) => item.id === v)
       if (rows.length) {
@@ -134,7 +134,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     
     // 获取选中的选项
     const { currentLevel, selectedRows } = getSelectedRows(props)
-    console.log('selectedRows :', selectedRows, currentLevel);
+
     this.state = {
       // 异步加载二级后，从props中获取一级的省id
       asyncIdOneFromProps: 0,
@@ -335,23 +335,24 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const isEnd = (level || !isAsyncData) && (!item.subArea || !item.subArea.length)
 
     if (selectedRows[level]) {
-      const args: any[] = [level, 1, item]
+
+      // 用于下方选择的数据和空项目
+      const tmpItem = [item]
+
       if (isAsyncData && level === 0 && item.subArea && !item.subArea.length) {
         this.props.getOneLevelData(item, level)
       }
 
       if (item.subArea && item.subArea.length && currentLevel + 1 >= selectedRows.length) {
 
-        args.push({})
+        tmpItem.push({})
       } else if (currentLevel + 1 < selectedRows.length) {
         selectedRows = selectedRows.slice(0, currentLevel + 1)
 
-        args.push({})
+        tmpItem.push({})
       }
 
-
-      // selectedRows.splice(...args)
-
+      selectedRows.splice(level, 1, ...tmpItem)
 
       this.setState({
         selectedRows: [...selectedRows],
@@ -369,7 +370,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
         }
       })
 
-      console.log('_selectList :', _selectList);
       this.props.onAddressChange(_selectList)
     }
   }
@@ -387,7 +387,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   renderNextData = (ds: IOneRowProps[], level = 0, item: IOneRowProps) => {
     const { selectedRows } = this.state
     const row = selectedRows[level] || {}
-    // const lists = level > 0 ? item.subArea : ds
     console.log('item :', item)
     const lists = level > 0 ? selectedRows[level - 1].subArea : ds
 
@@ -414,7 +413,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const { selectedRows, show, currentLevel } = this.state
     const { dataSource, navTips, title, className, onClose } = this.props
 
-    console.log('dataSource :', dataSource);
     // 这一条是不是不太好
     const wrapStyles: React.CSSProperties = {
       width: `${selectedRows.length * 100}%`
@@ -425,8 +423,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     } else if (currentLevel > 0) {
       wrapStyles.transform = `translate3d(-${(currentLevel / selectedRows.length) * 100}%, 0, 0)`
     }
-
-    console.log('selectedRows :', selectedRows);
 
     let node = (
       <div className={cx(`${PICKER_CLASSNAME} ${className}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
