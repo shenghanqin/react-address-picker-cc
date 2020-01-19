@@ -1,3 +1,4 @@
+import typescript from 'rollup-plugin-typescript2'
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import external from 'rollup-plugin-peer-deps-external'
@@ -9,7 +10,7 @@ import svgr from '@svgr/rollup'
 import pkg from './package.json'
 
 export default {
-  input: 'src/index.js',
+  input: 'src/index.tsx',
   output: [
     {
       file: pkg.main,
@@ -34,6 +35,10 @@ export default {
       plugins: [ 'external-helpers' ]
     }),
     resolve(),
+    typescript({
+      rollupCommonJSResolveHack: true,
+      clean: true
+    }),
     commonjs()
   ]
 }
