@@ -145,11 +145,12 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
   }
 
+  // TODO 写法有问题
   static getDerivedStateFromProps(nextProps: AddressProps, prevState: AddressState) {
     const { selectedIdList, dataSource } = nextProps
     const { selectedRows: prevSelectedRows } = prevState
 
-    // 初始化数据
+    // 初始化数据，需要外界获取好市级数据
     if (selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
       !prevSelectedRows[0].id
     )) {
