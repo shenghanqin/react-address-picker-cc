@@ -8,10 +8,10 @@ const PICKER_CLASSNAME = 'rap-address-picker'
 
 let cx = classNames.bind(styles)
 
-interface OneRowProps {
+interface IOneRowProps {
   id?: number,
   areaName?: string,
-  subArea?: OneRowProps[]
+  subArea?: IOneRowProps[]
   length?: number
 }
 
@@ -32,7 +32,7 @@ interface AddressProps {
   /**
    * TODO 数据源，多维数组
    */
-  dataSource: OneRowProps[],
+  dataSource: IOneRowProps[],
   /**
    * 自定义组件标题
    */
@@ -60,11 +60,11 @@ interface AddressProps {
   /**
    * 初始化地址的id数组
    */
-  getOneLevelData: (item: OneRowProps, level: number) => void,
+  getOneLevelData: (item: IOneRowProps, level: number) => void,
   /**
    * 初始化地址的id数组
    */
-  onAddressChange: (selectRowList: OneRowProps) => void,
+  onAddressChange: (selectRowList: IOneRowProps) => void,
   /**
    * pickerStatusChange
    */
@@ -81,18 +81,18 @@ interface TouchProps {
 
 interface AddressState {
   asyncIdOneFromProps: number
-  selectedRows: any
-  currentLevel: any
+  selectedRows: IOneRowProps[]
+  currentLevel: number
   show: boolean
   touch: TouchProps
 }
 
-export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: OneRowProps[] }): { currentLevel: number, selectedRows: OneRowProps[] } => {
-  const selectedRows: OneRowProps[] = []
+export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: IOneRowProps[] }): { currentLevel: number, selectedRows: IOneRowProps[] } => {
+  const selectedRows: IOneRowProps[] = []
   if (selectedIdList && dataSource && selectedIdList.length) {
-    const loop = (ds: OneRowProps[], level: number) => {
+    const loop = (ds: IOneRowProps[], level: number) => {
       const v = selectedIdList[level]
-      const rows = ds.filter((item: OneRowProps) => item.id === v)
+      const rows = ds.filter((item: IOneRowProps) => item.id === v)
       if (rows.length) {
         selectedRows.push(rows[0])
         if (rows[0].subArea && rows[0].subArea.length && selectedIdList.length === level + 1) {
@@ -289,7 +289,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     let listWrapRef = this.listWrapRef
     let listWrapChilds = listWrapRef.children
     const { selectedRows } = this.state
-    selectedRows.forEach((row: any, rowIndex: number) => {
+    selectedRows.forEach((row: IOneRowProps, rowIndex: number) => {
       // TODO 判断不需要居中的？？？
       let listElm = listWrapChilds[rowIndex]
       if (!listElm) return
@@ -315,7 +315,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     })
   }
 
-  onSelectedRow = (item: any, level: number) => () => {
+  onSelectedRow = (item: IOneRowProps, level: number) => () => {
     const { currentLevel } = this.state
     let { selectedRows } = this.state
     const { isAsyncData } = this.props
@@ -351,7 +351,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
 
     if (isEnd) {
-      let _selectList = selectedRows.filter((_item: any) => typeof _item.id !== 'undefined').map((_item: any) => {
+      let _selectList = selectedRows.filter((_item: IOneRowProps) => typeof _item.id !== 'undefined').map((_item: IOneRowProps) => {
         return {
           id: _item.id,
           areaName: _item.areaName
@@ -373,7 +373,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     this.navLineRef.style.width = 0
   }
 
-  renderNextData = (ds: any, level = 0, item: any) => {
+  renderNextData = (ds: IOneRowProps[], level = 0, item: IOneRowProps) => {
     const { selectedRows } = this.state
     const row = selectedRows[level] || {}
     // const lists = level > 0 ? item.subArea : ds
@@ -385,7 +385,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
     return (
       <div key={level} className={`${PICKER_CLASSNAME}-body-list`}>
-        {lists.map((item: any) => (
+        {lists.map((item: IOneRowProps) => (
           <div
             key={item.id}
             className={
@@ -428,7 +428,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
             <div className={`${PICKER_CLASSNAME}-nav`}>
               <div className={`${PICKER_CLASSNAME}-nav-list`} ref={nav => (this.navRef = nav)} onTouchMove={this.onNavBarMove}>
                 {
-                  selectedRows.map((item: any, index: number) => (
+                  selectedRows.map((item: IOneRowProps, index: number) => (
                     <div key={index}
                       onClick={this.onSelectedNav(index)}
                       id={`nav-item-${index}`}
@@ -444,7 +444,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
             <div className={`${PICKER_CLASSNAME}-body`}>
               <div className={`${PICKER_CLASSNAME}-body-wrap`} ref={wrap => (this.listWrapRef = wrap)} style={wrapStyles}>
                 {
-                  selectedRows.map((item: any, index: number) => this.renderNextData(dataSource, index, item))
+                  selectedRows.map((item: IOneRowProps, index: number) => this.renderNextData(dataSource, index, item))
                 }
               </div>
             </div>
