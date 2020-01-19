@@ -65,14 +65,65 @@ interface AddressProps {
 }
 
 interface AddressState {
-  abc: string
+  asyncIdOneFromProps: number
+  selectedRows: any
+  currentLevel: any
+  show: boolean
 }
 
+// interface selectedIdListProps {
+//   id: 123
+// }
+
+export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: any, dataSource : any }): any => {
+  const selectedRows: any = []
+  if (selectedIdList && dataSource && selectedIdList.length) {
+    const loop = (ds: any, level: number) => {
+      const v = selectedIdList[level]
+      const rows = ds.filter((item: { id: number }) => item.id === v)
+      if (rows.length) {
+        selectedRows.push(rows[0])
+        if (rows[0].subArea && rows[0].subArea.length && selectedIdList.length === level + 1) {
+          selectedRows.push({})
+        } else if (rows[0].subArea && rows[0].subArea.length) {
+          loop(rows[0].subArea, ++level)
+        }
+      }
+    }
+    loop(dataSource, 0)
+  }
+
+  if (!selectedRows.length) {
+    return {
+      currentLevel: 0,
+      selectedRows: [{}]
+    }
+  }
+  return {
+    currentLevel: selectedRows.length - 1,
+    selectedRows
+  }
+  
+}
 
 
 export default class AddressPicker extends React.Component<AddressProps, AddressState> {
   static defaultProps: AddressProps
   static propTypes: PropTypes.InferProps<AddressProps>
+
+  constructor(props: AddressProps) {
+    super(props)
+
+    // 获取选中的选项
+    const { currentLevel, selectedRows } = getSelectedRows(props)
+    this.state = {
+      // 异步加载二级后，从props中获取一级的省id
+      asyncIdOneFromProps: 0,
+      selectedRows,
+      currentLevel,
+      show: false
+    }
+  }
 
   render() {
     return <div className={cx(PICKER_CLASSNAME)}>123</div>
