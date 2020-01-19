@@ -60,7 +60,7 @@ interface AddressProps {
   /**
    * 初始化地址的id数组
    */
-  getOneLevelData: (item: IOneRowProps, level: number) => void,
+  getOneLevelData: (item: IOneRowProps, level: number) => any,
   /**
    * 初始化地址的id数组
    */
@@ -80,7 +80,6 @@ interface ITouchProps {
 
 
 interface AddressState {
-  asyncIdOneFromProps: number
   selectedRows: IOneRowProps[]
   currentLevel: number
   show: boolean
@@ -140,8 +139,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const { currentLevel, selectedRows } = getSelectedRows(props)
 
     this.state = {
-      // 异步加载二级后，从props中获取一级的省id
-      asyncIdOneFromProps: 0,
       selectedRows,
       currentLevel,
       show: false
@@ -149,8 +146,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   }
 
   static getDerivedStateFromProps(nextProps: AddressProps, prevState: AddressState) {
-    const { asyncIdOne, selectedIdList, dataSource, isAsyncData } = nextProps
-    const { asyncIdOneFromProps, selectedRows: prevSelectedRows } = prevState
+    const { selectedIdList, dataSource } = nextProps
+    const { selectedRows: prevSelectedRows } = prevState
 
     // 初始化数据
     if (selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
@@ -158,29 +155,18 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     )) {
       let oneId = selectedIdList[0]
       const rows = dataSource.filter(item => item.id === oneId)
-      if (rows.length && rows[0].subArea && rows[0].subArea.length) {
+      if (rows && rows[0].subArea && rows[0].subArea) {
         const { selectedRows, currentLevel } = getSelectedRows(nextProps)
         return {
           currentLevel,
           selectedRows
         }
       }
-    } else if (isAsyncData && asyncIdOne > 0 && asyncIdOneFromProps !== asyncIdOne) {
-      // 异步加载数据后
-      const { selectedRows } = getSelectedRows({
-        selectedIdList: [asyncIdOne],
-        dataSource: nextProps.dataSource
-      })
-
-      console.log('1 :', 1);
-      return {
-        asyncIdOneFromProps: asyncIdOne,
-        selectedRows
-      }
     }
-
+  
     return null
   }
+
 
   pickerStatusChange = (show: boolean) => {
     if (show) {
@@ -195,12 +181,11 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   }
 
   componentDidUpdate(prevProps: AddressProps, prevState: AddressState) {
-    const { show, asyncIdOneFromProps } = this.state
+    const { show } = this.state
 
     // TODO
     if (show && prevProps && (
       prevState.currentLevel !== this.state.currentLevel
-      || (this.state.currentLevel === 1 && asyncIdOneFromProps > 0)
     )) {
       this.doAnimation()
     }
@@ -306,6 +291,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const { currentLevel } = this.state
     this.setItemCenter()
 
+    console.log('doAnimation currentLevel :', currentLevel);
+
     const navItem = this.navRef.children[currentLevel]
     // TODO 写法
     if (navItem && !navItem.classList.contains('active')) {
@@ -358,6 +345,21 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     })
   }
 
+  getOneLevelData = (item: IOneRowProps, level: number) => {
+    this.props.getOneLevelData(item, level).then(({ dataSource, asyncIdOne }: { dataSource: IOneRowProps[], asyncIdOne: number }) => {
+      // 异步加载数据后
+      const { selectedRows } = getSelectedRows({
+        selectedIdList: [asyncIdOne],
+        dataSource
+      })
+
+      this.setState({
+        selectedRows
+      }, () => {
+        this.doAnimation()
+      })
+    }).catch((error: object) => console.log('error :', error))
+  }
   onSelectedRow = (item: IOneRowProps, level: number) => () => {
     const { currentLevel } = this.state
     let { selectedRows } = this.state
@@ -372,7 +374,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       const tmpItem = [item]
 
       if (isAsyncData && level === 0 && item.subArea && !item.subArea.length) {
-        this.props.getOneLevelData(item, level)
+        this.getOneLevelData(item, level)
       }
 
       if (item.subArea && item.subArea.length && currentLevel + 1 >= selectedRows.length) {
@@ -533,10 +535,10 @@ AddressPicker.propTypes = {
    * 自定义 关闭方法
    */
   onClose: () => {},
-  /**
-   * 异步数据返回的一级id
-   */
-  asyncIdOne: PropTypes.number,
+  // /**
+  //  * 异步数据返回的一级id
+  //  */
+  // asyncIdOne: PropTypes.number,
   /**
    * 初始化地址的id数组
    */

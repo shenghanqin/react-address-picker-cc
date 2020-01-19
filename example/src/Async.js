@@ -71,7 +71,7 @@ export default class AddressPickerAsyncExample extends Component {
   getOneLevelData = (item = {}, level) => {
     if (!item.id) return
     let _id = item.id
-    getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info?areaId=' + _id })
+    return getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info?areaId=' + _id })
       .then((subList) => {
         const { dataSource } = this.state
         let _index = dataSource.findIndex(item => item.id === _id)
@@ -80,10 +80,14 @@ export default class AddressPickerAsyncExample extends Component {
         }
         this.setState({
           dataSource,
-          asyncIdOne: level === 0 ? _id : 0
         })
+
+        return {
+          dataSource,
+          asyncIdOne: level === 0 ? _id : 0
+        }
       })
-      .catch(error => { console.log('error', error) })
+      // .catch(error => { console.log('error', error) })
   }
 
 
