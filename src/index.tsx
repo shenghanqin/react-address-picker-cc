@@ -8,6 +8,13 @@ const PICKER_CLASSNAME = 'rap-address-picker'
 
 let cx = classNames.bind(styles)
 
+interface OneRowProps {
+  id?: number,
+  areaName?: string,
+  subArea?: OneRowProps[]
+  length?: number
+}
+
 interface AddressProps {
   /**
    * 自定义className
@@ -25,7 +32,7 @@ interface AddressProps {
   /**
    * TODO 数据源，多维数组
    */
-  dataSource: any,
+  dataSource: OneRowProps[],
   /**
    * 自定义组件标题
    */
@@ -37,7 +44,7 @@ interface AddressProps {
   /**
    * TODO ! 初始化地址的id数组
    */
-  selectedIdList: any,
+  selectedIdList: number[],
   /**
    * 是否异步获取数据
    */
@@ -53,15 +60,15 @@ interface AddressProps {
   /**
    * 初始化地址的id数组
    */
-  getOneLevelData: (item: any, level: number) => void,
+  getOneLevelData: (item: OneRowProps, level: number) => void,
   /**
    * 初始化地址的id数组
    */
-  onAddressChange: (_selectList: any) => void,
+  onAddressChange: (selectRowList: OneRowProps) => void,
   /**
    * pickerStatusChange
    */
-  pickerStatusChange: () => void
+  pickerStatusChange: (show: boolean) => void
 }
 
 interface TouchProps {
@@ -80,12 +87,12 @@ interface AddressState {
   touch: TouchProps
 }
 
-export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: any, dataSource : any }): any => {
-  const selectedRows: any = []
+export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: OneRowProps[] }): { currentLevel: number, selectedRows: OneRowProps[] } => {
+  const selectedRows: OneRowProps[] = []
   if (selectedIdList && dataSource && selectedIdList.length) {
-    const loop = (ds: any, level: number) => {
+    const loop = (ds: OneRowProps[], level: number) => {
       const v = selectedIdList[level]
-      const rows = ds.filter((item: { id: number }) => item.id === v)
+      const rows = ds.filter((item: OneRowProps) => item.id === v)
       if (rows.length) {
         selectedRows.push(rows[0])
         if (rows[0].subArea && rows[0].subArea.length && selectedIdList.length === level + 1) {
@@ -120,9 +127,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   navRef: any
   navLineRef: any
   touch: any = {}
-
-  // mainWrapRef: 
-
   
   constructor(props: AddressProps) {
     super(props)
@@ -150,7 +154,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       this.doAnimation()
       this.bindEvent()
     }
-    // this.props.pickerStatusChange(show)
+    this.props.pickerStatusChange(show)
   }
 
   componentWillUnmount() {
@@ -319,6 +323,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     // 大于一级才可以没有下级
     const isEnd = (level || !isAsyncData) && (!item.subArea || !item.subArea.length)
 
+    console.log('isEnd :', isEnd);
+
     if (selectedRows[level]) {
       const args = [level, 1, item]
       if (isAsyncData && level === 0 && item.subArea && !item.subArea.length) {
@@ -351,6 +357,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
           areaName: _item.areaName
         }
       })
+
+      console.log('_selectList :', _selectList);
       this.props.onAddressChange(_selectList)
     }
   }
@@ -368,8 +376,9 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   renderNextData = (ds: any, level = 0, item: any) => {
     const { selectedRows } = this.state
     const row = selectedRows[level] || {}
-    const lists = level > 0 ? item.subArea : ds
-    // const lists = level > 0 ? selectedRows[level - 1].subArea : ds
+    // const lists = level > 0 ? item.subArea : ds
+    console.log('item :', item)
+    const lists = level > 0 ? selectedRows[level - 1].subArea : ds
 
     if (!lists || !lists.length) {
       return null
@@ -393,8 +402,10 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   render() {
     const { selectedRows, show, currentLevel } = this.state
     const { dataSource, navTips, title, className, onClose } = this.props
+
+    console.log('dataSource :', dataSource);
     // 这一条是不是不太好
-    const wrapStyles: any = {
+    const wrapStyles: React.CSSProperties = {
       width: `${selectedRows.length * 100}%`
     }
 
