@@ -148,6 +148,40 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
   }
 
+  static getDerivedStateFromProps(nextProps: AddressProps, prevState: AddressState) {
+    const { asyncIdOne, selectedIdList, dataSource, isAsyncData } = nextProps
+    const { asyncIdOneFromProps, selectedRows: prevSelectedRows } = prevState
+
+    // 初始化数据
+    if (selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
+      !prevSelectedRows[0].id
+    )) {
+      let oneId = selectedIdList[0]
+      const rows = dataSource.filter(item => item.id === oneId)
+      if (rows.length && rows[0].subArea && rows[0].subArea.length) {
+        const { selectedRows, currentLevel } = getSelectedRows(nextProps)
+        return {
+          currentLevel,
+          selectedRows
+        }
+      }
+    } else if (isAsyncData && asyncIdOne > 0 && asyncIdOneFromProps !== asyncIdOne) {
+      // 异步加载数据后
+      const { selectedRows } = getSelectedRows({
+        selectedIdList: [asyncIdOne],
+        dataSource: nextProps.dataSource
+      })
+
+      console.log('1 :', 1);
+      return {
+        asyncIdOneFromProps: asyncIdOne,
+        selectedRows
+      }
+    }
+
+    return null
+  }
+
   pickerStatusChange = (show: boolean) => {
     if (show) {
       this.doAnimation()
