@@ -71,20 +71,19 @@ interface AddressProps {
   pickerStatusChange: (show: boolean) => void
 }
 
-interface TouchProps {
-  startX: number
-  startY: number
-  moved: boolean
-  targetIdx: number
+interface ITouchProps {
+  startX?: number
+  startY?: number
+  moved?: boolean
+  targetIdx?: number
 }
 
 
 interface AddressState {
   asyncIdOneFromProps: number
-  selectedRows: any //IOneRowProps[]
+  selectedRows: IOneRowProps[]
   currentLevel: number
   show: boolean
-  touch: TouchProps
 }
 
 export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: IOneRowProps[] }): { currentLevel: number, selectedRows: IOneRowProps[] } => {
@@ -93,7 +92,7 @@ export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList
     const loop = (ds: any, level: number) => {
 
       const v = selectedIdList[level]
-      const rows = ds.filter((item: any) => item.id === v)
+      const rows = ds.filter((item: IOneRowProps) => item.id === v)
       if (rows.length) {
         selectedRows.push(rows[0])
         if (rows[0].subArea && rows[0].subArea.length && selectedIdList.length === level + 1) {
@@ -127,7 +126,12 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   listWrapRef: any
   navRef: any
   navLineRef: any
-  touch: any = {}
+  touch: ITouchProps = {
+    startX: -1,
+    startY: -1,
+    moved: false,
+    targetIdx: -1
+  }
   
   constructor(props: AddressProps) {
     super(props)
@@ -140,13 +144,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       asyncIdOneFromProps: 0,
       selectedRows,
       currentLevel,
-      show: false,
-      touch: {
-        startX: 0,
-        startY: 0,
-        moved: false,
-        targetIdx: -1
-      }
+      show: false
     }
   }
 
@@ -209,8 +207,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const { currentLevel, selectedRows } = this.state
     const moveX = e.touches[0].clientX
     const moveY = e.touches[0].clientY
-    const deltaX = moveX - this.state.touch.startX
-    const deltaY = moveY - this.state.touch.startY
+    const deltaX = moveX - (this.touch.startX || 0)
+    const deltaY = moveY - (this.touch.startY || 0)
 
     if (Math.abs(deltaY) > Math.abs(deltaX)) return
 
@@ -223,14 +221,14 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const maxOffsetWidth = -((selectedRows.length - 1) * innerWidth)
     const offsetWidth = Math.min(0, Math.max(maxOffsetWidth, curOffsetWidth + deltaX))
     if (offsetWidth >= 0 || offsetWidth <= maxOffsetWidth) return
-    if (!this.state.touch.moved) this.state.touch.moved = true
+    if (!this.touch.moved) this.touch.moved = true
     e.preventDefault()
     
     this.listWrapRef.style.transform = `translate3d(${offsetWidth}px, 0, 0)`
 
     const percent = Math.abs(deltaX / innerWidth)
 
-    this.state.touch.targetIdx =
+    this.touch.targetIdx =
       percent >= 0.1
         ? (deltaX < 0 ? currentLevel + 1 : currentLevel - 1)
         : currentLevel
@@ -244,7 +242,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     let innerWidth = mainWrapRef.offsetWidth
     if (this.touch.targetIdx !== currentLevel) {
       this.setState({
-        currentLevel: this.touch.targetIdx
+        currentLevel: this.touch.targetIdx || -1
       })
     } else {
       // 没有移动到别的级别，就返回当前
