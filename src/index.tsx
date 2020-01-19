@@ -108,11 +108,11 @@ AddressPicker.propTypes = {
   /**
    * 是否异步获取数据
    */
-  isAsyncData: boolean,
+  isAsyncData: PropTypes.bool,
   /**
    * 自定义 关闭方法
    */
-  onClose: () => void,
+  onClose: () => {},
   /**
    * 异步数据返回的一级id
    */
@@ -120,15 +120,15 @@ AddressPicker.propTypes = {
   /**
    * 初始化地址的id数组
    */
-  getOneLevelData: () => void,
+  getOneLevelData: () => {},
   /**
    * 初始化地址的id数组
    */
-  onAddressChange: () => void,
+  onAddressChange: () => {},
   /**
    * pickerStatusChange
    */
-  pickerStatusChange: () => void
+  pickerStatusChange: () => {}
 }
 
 
