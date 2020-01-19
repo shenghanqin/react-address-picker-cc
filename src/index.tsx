@@ -90,9 +90,10 @@ interface AddressState {
 export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: IOneRowProps[] }): { currentLevel: number, selectedRows: IOneRowProps[] } => {
   const selectedRows: IOneRowProps[] = []
   if (selectedIdList && dataSource && selectedIdList.length) {
-    const loop = (ds: IOneRowProps[], level: number) => {
+    const loop = (ds: any, level: number) => {
+      console.log('ds :', ds);
       const v = selectedIdList[level]
-      const rows = ds.filter((item: IOneRowProps) => item.id === v)
+      const rows = ds.filter((item: any) => item.id === v)
       if (rows.length) {
         selectedRows.push(rows[0])
         if (rows[0].subArea && rows[0].subArea.length && selectedIdList.length === level + 1) {
@@ -173,12 +174,22 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
   }
 
+  /**
+   * 外部调用，显示事件
+   *
+   * @memberof AddressPicker
+   */
   show = () => {
     this.setState({
       show: true
     }, () => this.pickerStatusChange(this.state.show))
   }
 
+  /**
+   * 外部调用，显示事件
+   *
+   * @memberof AddressPicker
+   */
   hide = () => {
     this.setState({
       // 关掉后重置数据
@@ -323,10 +334,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     // 大于一级才可以没有下级
     const isEnd = (level || !isAsyncData) && (!item.subArea || !item.subArea.length)
 
-    console.log('isEnd :', isEnd);
-
     if (selectedRows[level]) {
-      const args = [level, 1, item]
+      const args: any[] = [level, 1, item]
       if (isAsyncData && level === 0 && item.subArea && !item.subArea.length) {
         this.props.getOneLevelData(item, level)
       }
@@ -339,7 +348,9 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
         args.push({})
       }
-      selectedRows.splice(...args)
+
+
+      // selectedRows.splice(...args)
 
 
       this.setState({
