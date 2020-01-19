@@ -15,11 +15,13 @@ export default {
     {
       file: pkg.main,
       format: 'cjs',
+      exports: 'named',
       sourcemap: true
     },
     {
       file: pkg.module,
       format: 'es',
+      exports: 'named',
       sourcemap: true
     }
   ],
@@ -30,10 +32,6 @@ export default {
     }),
     url(),
     svgr(),
-    babel({
-      exclude: 'node_modules/**',
-      plugins: [ 'external-helpers' ]
-    }),
     resolve(),
     typescript({
       rollupCommonJSResolveHack: true,

@@ -9,22 +9,6 @@ const PICKER_CLASSNAME = 'rap-address-picker'
 let cx = classNames.bind(styles)
 
 interface AddressProps {
-  // /**
-  //  * 自定义className
-  //  *
-  //  * @type {(string | string[] | { [key: string]: boolean })}
-  //  */
-  // className?: string | string[] | { [key: string]: boolean },
-
-  // /**
-  //  * 自定义Style
-  //  * 
-  //  * @type {(string | CSSProperties)}
-  //  */
-  // customStyle?: string | React.CSSProperties
-}
-
-interface AddressProps {
   /**
    * 自定义className
    *
@@ -40,13 +24,13 @@ interface AddressProps {
   customStyle?: string | React.CSSProperties
 }
 
-// interface AddressState {
-//   abc: string
-// }
+interface AddressState {
+  abc: string
+}
 
 
 
-export default class AddressPicker extends React.Component<AddressProps> {
+export default class AddressPicker extends React.Component<AddressProps, AddressState> {
   // public static defaultProps: AddressProps
   static propTypes: PropTypes.InferProps<AddressProps>
 
