@@ -128,10 +128,12 @@ const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: numbe
 export default class AddressPicker extends React.Component<AddressProps, AddressState> {
   static defaultProps: AddressProps
   static propTypes: PropTypes.InferProps<AddressProps>
+
   mainWrapRef: any
   listWrapRef: any
   navRef: any
   navLineRef: any
+
   touch: ITouchProps = {
     startX: -1,
     startY: -1,
@@ -458,7 +460,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
     if (selectedRows.length === 1) {
       wrapStyles.transform = 'translate3d(0, 0, 0)'
-    } else if (currentLevel > 0) {
+    } else if (currentLevel >= 0) {
       wrapStyles.transform = `translate3d(-${(currentLevel / selectedRows.length) * 100}%, 0, 0)`
     }
 
