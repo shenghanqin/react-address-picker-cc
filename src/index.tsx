@@ -165,7 +165,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       )) {
       let oneId = selectedIdList[0]
       const rows = dataSource.filter(item => item.id === oneId)
-      if (rows && rows[0].subArea && rows[0].subArea) {
+      if (rows) {
         const { selectedRows, currentLevel } = getSelectedRows(nextProps)
 
         return {
@@ -456,7 +456,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const { selectedRows, show, currentLevel } = this.state
     const { dataSource, navTips, title, className, theme, onClose } = this.props
 
-    // 这一条是不是不太好
+    // TODO 这一条是不是不太好
     const wrapStyles: React.CSSProperties = {
       width: `${selectedRows.length * 100}%`
     }
@@ -467,6 +467,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       wrapStyles.transform = `translate3d(-${(currentLevel / selectedRows.length) * 100}%, 0, 0)`
     }
 
+    console.log('selectedRows :', selectedRows);
     let node = (
       <div className={cx(`${PICKER_CLASSNAME} ${className} ${theme}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
         <div className={`${PICKER_CLASSNAME}-modal`}>
