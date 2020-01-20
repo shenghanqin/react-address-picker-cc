@@ -35,24 +35,34 @@ export default class AddressPickerAsyncExample extends Component {
     address: '',
     dataSource: [],
     // selectedIdList: [],
-    selectedIdList: [3, 141, 623],
+    selectedIdList: [3, 143, 641],
     // selectedIdList: [3],
-    asyncIdOne: 0
+    isLoadingData: true
   }
 
   async componentDidMount() {
     const { selectedIdList } = this.state
-    await this.loadData()
-    if (selectedIdList.length > 0) {
-      await this.getOneLevelData({
-        id: selectedIdList[0]
-      }, 2)
+    
+    try {
+      await this.loadData()
+      if (selectedIdList.length > 0) {
+        await this.getOneLevelData({
+          id: selectedIdList[0]
+        }, 2)
+      }
+    } catch (error) {
+      console.log('error :', error);
+    } finally {
+      this.setState({
+        isLoadingData: false
+      })
     }
+
   }
 
 
   loadData = async () => {
-    await getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info' })
+    return getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info' })
       .then((list) => {
         let dataSource = list.map(item => {
           return {
@@ -63,15 +73,13 @@ export default class AddressPickerAsyncExample extends Component {
         this.setState({
           dataSource
         })
-
       })
-      .catch(error => { console.log('error', error) })
   }
 
-  getOneLevelData = (item = {}, level) => {
+  getOneLevelData = (item = {}) => {
     if (!item.id) return
     let _id = item.id
-    getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info?areaId=' + _id })
+    return getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info?areaId=' + _id })
       .then((subList) => {
         const { dataSource } = this.state
         let _index = dataSource.findIndex(item => item.id === _id)
@@ -80,10 +88,12 @@ export default class AddressPickerAsyncExample extends Component {
         }
         this.setState({
           dataSource,
-          asyncIdOne: level === 0 ? _id : 0
         })
+
+        return {
+          dataSource
+        }
       })
-      .catch(error => { console.log('error', error) })
   }
 
 
@@ -105,22 +115,27 @@ export default class AddressPickerAsyncExample extends Component {
   }
 
   render() {
-    const { dataSource, selectedIdList, asyncIdOne } = this.state
+    const { dataSource, selectedIdList, isLoadingData } = this.state
     // console.log('render ouer :', dataSource);
     return (
       <div>
         <h1>异步获取数据</h1>
         <input onClick={this.showPicker} value={this.state.address} placeholder="请选择收货地址" readOnly style={{ width: '90%' }} />
-        <AddressPicker
-          ref={picker => this.picker = picker}
-          dataSource={dataSource}
-          onAddressChange={this.onAddressChange}
-          getOneLevelData={this.getOneLevelData}
-          selectedIdList={selectedIdList}
-          asyncIdOne={asyncIdOne}
-          isAsyncData={true}
-          onClose={this.hidePicker}
-        />
+        {
+          !isLoadingData && (
+            <AddressPicker
+              ref={picker => this.picker = picker}
+              dataSource={dataSource}
+              onAddressChange={this.onAddressChange}
+              getOneLevelData={this.getOneLevelData}
+              selectedIdList={selectedIdList}
+              isAsyncData={true}
+              theme='theme-dark'
+              onClose={this.hidePicker}
+            />
+          )
+          
+        }
       </div>
     )
   }
