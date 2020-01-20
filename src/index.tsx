@@ -90,8 +90,10 @@ interface AddressState {
   show: boolean
 }
 
-export const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: IOneRowProps[] }): { currentLevel: number, selectedRows: IOneRowProps[] } => {
+const getSelectedRows = ({ selectedIdList, dataSource }: { selectedIdList: number[], dataSource: IOneRowProps[] }): { currentLevel: number, selectedRows: IOneRowProps[] } => {
+
   const selectedRows: IOneRowProps[] = []
+
   if (selectedIdList && dataSource && selectedIdList.length) {
     const loop = (ds: any, level: number) => {
 
@@ -150,19 +152,20 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
   }
 
-  // TODO 写法有问题
   static getDerivedStateFromProps(nextProps: AddressProps, prevState: AddressState) {
     const { selectedIdList, dataSource } = nextProps
-    const { selectedRows: prevSelectedRows } = prevState
+    const { selectedRows: prevSelectedRows, show } = prevState
 
     // 初始化数据，需要外界获取好市级数据
-    if (selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
+    // 从关闭到打开，每次都要重新获取一遍数据，为了保证准确，也为了防止外界强行更换了数据
+    if (!show && selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
       !prevSelectedRows[0].id
-    )) {
+      )) {
       let oneId = selectedIdList[0]
       const rows = dataSource.filter(item => item.id === oneId)
       if (rows && rows[0].subArea && rows[0].subArea) {
         const { selectedRows, currentLevel } = getSelectedRows(nextProps)
+
         return {
           currentLevel,
           selectedRows
@@ -172,8 +175,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   
     return null
   }
-
-
+  
   pickerStatusChange = (show: boolean) => {
     if (show) {
       this.doAnimation()
@@ -189,10 +191,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   componentDidUpdate(prevProps: AddressProps, prevState: AddressState) {
     const { show } = this.state
 
-    // TODO
-    if (show && prevProps && (
-      prevState.currentLevel !== this.state.currentLevel
-    )) {
+    // 更换层级时执行
+    if (show && prevProps && prevState.currentLevel !== this.state.currentLevel) {
       this.doAnimation()
     }
   }
@@ -296,8 +296,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   doAnimation = () => {
     const { currentLevel } = this.state
     this.setItemCenter()
-
-    console.log('doAnimation currentLevel :', currentLevel);
 
     const navItem = this.navRef.children[currentLevel]
     // TODO 写法
@@ -427,8 +425,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   renderNextData = (ds: IOneRowProps[], level = 0, item: IOneRowProps) => {
     const { selectedRows } = this.state
     const row = selectedRows[level] || {}
-    console.log('item :', item)
-    const lists = level > 0 ? selectedRows[level - 1].subArea : ds
+
+    const lists = item && level > 0 ? selectedRows[level - 1].subArea : ds
 
     if (!lists || !lists.length) {
       return null
