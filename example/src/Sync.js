@@ -29,13 +29,14 @@ export default class Sync extends Component {
 
   
   render () {
-    const { dataSource } = this.state
+    const { dataSource, selectedIdList } = this.state
     return (
       <div>
         <h1>同步获取</h1>
         <input onClick={this.showPicker} value={this.state.address} placeholder="请选择地区" readOnly style={{ width: '90%' }} />
         <AddressPicker 
           dataSource={dataSource}
+          selectedIdList={selectedIdList}
           text='这是收货地址组件'
           ref={e => (this.ecRef = e)}
           onAddressChange={this.onAddressChange}
