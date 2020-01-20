@@ -195,7 +195,9 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
     // 更换层级时执行
     if (show && prevProps && prevState.currentLevel !== this.state.currentLevel) {
-      this.doAnimation()
+      setTimeout(() => {
+        this.doAnimation()
+      })
     }
   }
 
@@ -267,9 +269,10 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     let mainWrapRef = this.mainWrapRef
     if (!mainWrapRef) return
     let innerWidth = mainWrapRef.offsetWidth
+
     if (this.touch.targetIdx !== currentLevel) {
       this.setState({
-        currentLevel: this.touch.targetIdx || -1
+        currentLevel: this.touch.targetIdx || 0
       })
     } else {
       // 没有移动到别的级别，就返回当前
@@ -460,7 +463,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
     if (selectedRows.length === 1) {
       wrapStyles.transform = 'translate3d(0, 0, 0)'
-    } else if (currentLevel >= 0) {
+    } else if (currentLevel > 0) {
       wrapStyles.transform = `translate3d(-${(currentLevel / selectedRows.length) * 100}%, 0, 0)`
     }
 
