@@ -76,7 +76,7 @@ export default class AddressPickerAsyncExample extends Component {
       })
   }
 
-  getOneLevelData = (item = {}, level) => {
+  getOneLevelData = (item = {}) => {
     if (!item.id) return
     let _id = item.id
     return getApi({ url: 'https://www.cctalk.com/webapi/trade/v1.1/user/get_area_info?areaId=' + _id })
@@ -91,8 +91,7 @@ export default class AddressPickerAsyncExample extends Component {
         })
 
         return {
-          dataSource,
-          asyncIdOne: level === 0 ? _id : 0
+          dataSource
         }
       })
   }

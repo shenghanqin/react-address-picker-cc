@@ -355,10 +355,10 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   }
 
   getOneLevelData = (item: IOneRowProps, level: number) => {
-    this.props.getOneLevelData(item, level).then(({ dataSource, asyncIdOne }: { dataSource: IOneRowProps[], asyncIdOne: number }) => {
+    this.props.getOneLevelData(item, level).then(({ dataSource }: { dataSource: IOneRowProps[] }) => {
       // 异步加载数据后
       const { selectedRows } = getSelectedRows({
-        selectedIdList: [asyncIdOne],
+        selectedIdList: item.id ? [item.id] : [],
         dataSource
       })
 
