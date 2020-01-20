@@ -35,7 +35,7 @@ interface AddressProps {
    */
   theme?: '' | 'theme-light' |'theme-dark' | string
   /**
-   * TODO 数据源，多维数组
+   * 数据源，多维数组
    */
   dataSource: IOneRowProps[],
   /**
@@ -47,7 +47,7 @@ interface AddressProps {
    */
   navTips: string,
   /**
-   * TODO ! 初始化地址的id数组
+   * 初始化地址的id数组
    */
   selectedIdList: number[],
   /**
@@ -300,16 +300,16 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
   doAnimation = () => {
     const { currentLevel } = this.state
+
     this.setItemCenter()
 
     const navItem = this.navRef.children[currentLevel]
-    // TODO 写法
+
     if (navItem && !navItem.classList.contains('active')) {
       this.navLineRef.style.width = `${navItem.offsetWidth}px`
       this.navLineRef.style.left = `${navItem.offsetLeft}px`
       this.navLineRef.style.bottom = `${this.navRef.clientHeight - (navItem.offsetTop + navItem.offsetHeight)}px`
 
-      // TODO 这一条可以避开？
       const activeItem = document.querySelector(`.${PICKER_CLASSNAME}-nav-item.active`)
 
       if (activeItem) {
@@ -329,7 +329,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     let listWrapChilds = listWrapRef.children
     const { selectedRows } = this.state
     selectedRows.forEach((row: IOneRowProps, rowIndex: number) => {
-      // TODO 判断不需要居中的？？？
+
       let listElm = listWrapChilds[rowIndex]
       if (!listElm) return
 
@@ -456,7 +456,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const { selectedRows, show, currentLevel } = this.state
     const { dataSource, navTips, title, className, theme, onClose } = this.props
 
-    // TODO 这一条是不是不太好
     const wrapStyles: React.CSSProperties = {
       width: `${selectedRows.length * 100}%`
     }
