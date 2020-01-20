@@ -276,7 +276,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       })
     } else {
       // 没有移动到别的级别，就返回当前
-      this.listWrapRef.style = `translate3d(-${(currentLevel) * innerWidth}px, 0, 0)`
+      this.listWrapRef.style.transform = `translate3d(-${(currentLevel) * innerWidth}px, 0, 0)`
     }
   }
 
