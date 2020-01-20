@@ -467,7 +467,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       wrapStyles.transform = `translate3d(-${(currentLevel / selectedRows.length) * 100}%, 0, 0)`
     }
 
-    console.log('selectedRows :', selectedRows);
     let node = (
       <div className={cx(`${PICKER_CLASSNAME} ${className} ${theme}`, { [`${PICKER_CLASSNAME}-visible`]: show })}>
         <div className={`${PICKER_CLASSNAME}-modal`}>
