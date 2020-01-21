@@ -163,6 +163,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     }
   }
   
+  // TODO 这里要不要改一下？
   pickerStatusChange = (show: boolean) => {
     if (show) {
       this.doAnimation()
@@ -193,31 +194,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
    * @memberof AddressPicker
    */
   show = () => {
-    let tmpState = {}
-    const { selectedIdList, dataSource } = this.props
-    const { selectedRows } = this.state
-
-    // 显示前，看selectedRows是否为空
-    if (selectedIdList.length >= 1 && dataSource.length && selectedRows[0] && (
-      !selectedRows[0].id
-    )) {
-      let oneId = selectedIdList[0]
-      const rows = dataSource.filter(item => item.id === oneId)
-      if (rows) {
-        const { selectedRows, currentLevel } = getSelectedRows({
-          selectedIdList,
-          dataSource
-        })
-
-        tmpState =  {
-          currentLevel,
-          selectedRows
-        }
-      }
-    }
-
     this.setState({
-      ...tmpState,
       show: true
     }, () => this.pickerStatusChange(this.state.show))
   }
@@ -230,10 +207,34 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   hide = () => {
     this.setState({
       // 关掉后重置数据
-      selectedRows: [{}],
-      currentLevel: 0,
       show: false
     }, () => this.pickerStatusChange(this.state.show))
+  }
+
+  // TODO 目标是使用Ref外部调用
+  changeInnerState = () => {
+    const { selectedIdList, dataSource } = this.props
+    const { selectedRows } = this.state
+
+    // TODO 这里要不要改一下？
+    // 显示前，看selectedRows是否为空
+    if (selectedIdList.length >= 1 && dataSource.length && selectedRows[0] && (
+      !selectedRows[0].id
+    )) {
+      let oneId = selectedIdList[0]
+      const rows = dataSource.filter(item => item.id === oneId)
+      if (rows) {
+        const { selectedRows, currentLevel } = getSelectedRows({
+          selectedIdList,
+          dataSource
+        })
+
+        this.setState({
+          currentLevel,
+          selectedRows
+        })
+      }
+    }
   }
 
   onTouchStart = (e: any) => {
