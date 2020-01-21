@@ -6,6 +6,14 @@ import classNames from 'classnames/bind'
 
 const PICKER_CLASSNAME = 'rap-address-picker'
 
+function guid() {
+  return 'xxx'.replace(/[x]/g, function (c) {
+    let r = Math.random() * 16 | 0
+    let v = c == 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
+}
+
 let cx = classNames.bind(styles)
 
 interface IOneRowProps {
@@ -133,6 +141,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   listWrapRef: any
   navRef: any
   navLineRef: any
+  idUUid: string = guid()
 
   touch: ITouchProps = {
     startX: -1,
@@ -153,30 +162,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       show: false
     }
   }
-
-  static getDerivedStateFromProps(nextProps: AddressProps, prevState: AddressState) {
-    const { selectedIdList, dataSource } = nextProps
-    const { selectedRows: prevSelectedRows, show } = prevState
-
-    // 初始化数据，需要外界获取好市级数据
-    // 从关闭到打开，每次都要重新获取一遍数据，为了保证准确，也为了防止外界强行更换了数据
-    if (!show && selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
-      !prevSelectedRows[0].id
-      )) {
-      let oneId = selectedIdList[0]
-      const rows = dataSource.filter(item => item.id === oneId)
-      if (rows) {
-        const { selectedRows, currentLevel } = getSelectedRows(nextProps)
-
-        return {
-          currentLevel,
-          selectedRows
-        }
-      }
-    }
-  
-    return null
-  }
   
   pickerStatusChange = (show: boolean) => {
     if (show) {
@@ -195,6 +180,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
     // 更换层级时执行
     if (show && prevProps && prevState.currentLevel !== this.state.currentLevel) {
+
       setTimeout(() => {
         this.doAnimation()
       })
@@ -207,7 +193,31 @@ export default class AddressPicker extends React.Component<AddressProps, Address
    * @memberof AddressPicker
    */
   show = () => {
+    let tmpState = {}
+    const { selectedIdList, dataSource } = this.props
+    const { selectedRows } = this.state
+
+    // 显示前，看selectedRows是否为空
+    if (selectedIdList.length >= 1 && dataSource.length && selectedRows[0] && (
+      !selectedRows[0].id
+    )) {
+      let oneId = selectedIdList[0]
+      const rows = dataSource.filter(item => item.id === oneId)
+      if (rows) {
+        const { selectedRows, currentLevel } = getSelectedRows({
+          selectedIdList,
+          dataSource
+        })
+
+        tmpState =  {
+          currentLevel,
+          selectedRows
+        }
+      }
+    }
+
     this.setState({
+      ...tmpState,
       show: true
     }, () => this.pickerStatusChange(this.state.show))
   }
@@ -306,6 +316,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
     const navItem = this.navRef.children[currentLevel]
 
     if (navItem && !navItem.classList.contains('active')) {
+
       this.navLineRef.style.width = `${navItem.offsetWidth}px`
       this.navLineRef.style.left = `${navItem.offsetLeft}px`
       this.navLineRef.style.bottom = `${this.navRef.clientHeight - (navItem.offsetTop + navItem.offsetHeight)}px`
@@ -317,8 +328,10 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       }
 
       setTimeout(() => {
-        let _toActiItem = document.querySelector(`#nav-item-${currentLevel}`)
+        let _toActiItem = document.querySelector(`#nav-item-${this.idUUid}-${currentLevel}`)
+
         _toActiItem && _toActiItem.classList.add('active')
+        
       }, 300)
     }
   }
@@ -369,6 +382,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       })
     }).catch((error: object) => console.log('error :', error))
   }
+
   onSelectedRow = (item: IOneRowProps, level: number) => () => {
     const { currentLevel } = this.state
     let { selectedRows } = this.state
@@ -480,7 +494,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
                   selectedRows.map((item: IOneRowProps, index: number) => (
                     <div key={index}
                       onClick={this.onSelectedNav(index)}
-                      id={`nav-item-${index}`}
+                      id={`nav-item-${this.idUUid}-${index}`}
                       className={`${PICKER_CLASSNAME}-nav-item`}
                     >
                       {item.id ? item.areaName : navTips}
