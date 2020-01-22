@@ -151,6 +151,10 @@ export default class Sync extends Component {
 
 ## 重要版本升级记录
 
+- v1.1.0-beta.4
+  - 恢复 getDerivedStateFromProps 方法
+- v1.1.0-beta.3
+  - 删除 getDerivedStateFromProps 方法设置，在show方法上初始化数据
 - v1.1.0-beta.2 
   - 源代码改用TypeScript重写
   - 增加CSS变量更改样式主题，提供暗色主题
