@@ -1,0 +1,126 @@
+/**
+ * GHColors theme by Avi Aryan (http://aviaryan.in)
+ * Inspired by Github syntax coloring
+ */
+
+.code-example-code code[class*="language-"],
+.code-example-code pre[class*="language-"] {
+		color: #393A34;
+		font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+		font-size: 0.95em;
+		line-height: 1.2em;
+		-moz-tab-size: 4;
+		-o-tab-size: 4;
+		tab-size: 4;
+		-webkit-hyphens: none;
+		-moz-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+	}
+
+.code-example-code pre[class*="language-"]::-moz-selection,
+.code-example-code pre[class*="language-"]::-moz-selection, 
+.code-example-code code[class*="language-"]::-moz-selection, code[class*="language-"]::-moz-selection {
+		background: #b3d4fc;
+	}
+
+.code-example-code pre[class*="language-"]::selection,
+.code-example-code pre[class*="language-"]::selection,
+.code-example-code code[class*="language-"]::selection, code[class*="language-"]::selection {
+		background: #b3d4fc;
+	}
+
+
+	/* Code blocks */
+
+.code-example-code pre[class*="language-"] {
+		padding: 1em;
+		margin: .5em 0;
+		overflow: auto;
+		border: 1px solid #dddddd;
+		background-color: white;
+	}
+
+.code-example-code :not(pre) > code[class*="language-"], 
+.code-example-code pre[class*="language-"] {}
+
+
+	/* Inline code */
+
+.code-example-code :not(pre) > code[class*="language-"] {
+		padding: .2em;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		background: #f8f8f8;
+		border: 1px solid #dddddd;
+	}
+
+.code-example-code .token.comment, .
+.code-example-code .token.prolog,
+.code-example-code .token.doctype, .token.cdata {
+		color: #999988;
+		font-style: italic;
+	}
+
+.code-example-code .token.namespace {
+		opacity: .7;
+	}
+
+.code-example-code .token.string,
+.code-example-code .token.attr-value {
+		color: #e3116c;
+	}
+
+.code-example-code .token.punctuation,
+.code-example-code .token.operator {
+		color: #393A34;
+		/* no highlight */
+	}
+
+.code-example-code .token.entity,
+.code-example-code .token.url,
+.code-example-code .token.symbol,
+.code-example-code .token.number,
+.code-example-code .token.boolean,
+.code-example-code .token.variable,
+.code-example-code .token.constant,
+.code-example-code .token.property,
+.code-example-code .token.regex,
+.code-example-code .token.inserted {
+		color: #36acaa;
+	}
+
+.code-example-code .token.atrule,
+.code-example-code .token.keyword,
+.code-example-code .token.attr-name,
+.code-example-code .language-autohotkey .token.selector {
+	color: #00a4db;
+	}
+
+.code-example-code .token.function,
+.code-example-code .token.deleted,
+.code-example-code .language-autohotkey .token.tag {
+		color: #9a050f;
+	}
+
+.code-example-code .token.tag,
+.code-example-code .token.selector,
+.code-example-code .language-autohotkey .token.keyword {
+		color: #00009f;
+	}
+
+.code-example-code.token.important,
+.code-example-code.token.function,
+.code-example-code.token.bold {
+		font-weight: bold;
+	}
+
+.code-example-code .token.italic {
+		font-style: italic;
+	}
+}
