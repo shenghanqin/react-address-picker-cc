@@ -205,7 +205,6 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   componentDidUpdate(prevProps: AddressProps, prevState: AddressState) {
     const { show } = this.state
 
-    console.log('prevState.currentLevel !== this.state.currentLevel :', prevState.currentLevel, this.state.currentLevel);
     // 更换层级时执行
     if (show && prevProps && prevState.currentLevel !== this.state.currentLevel) {
 
@@ -345,8 +344,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
 
     const navItem = this.navRef.children[currentLevel]
 
-    if (navItem && !navItem.classList.contains('active')) {
-
+    if (navItem) {
       this.navLineRef.style.width = `${navItem.offsetWidth}px`
       this.navLineRef.style.left = `${navItem.offsetLeft}px`
       this.navLineRef.style.bottom = `${this.navRef.clientHeight - (navItem.offsetTop + navItem.offsetHeight)}px`
