@@ -162,6 +162,32 @@ export default class AddressPicker extends React.Component<AddressProps, Address
       show: false
     }
   }
+
+  static getDerivedStateFromProps(nextProps: AddressProps, prevState: AddressState) {
+    const { selectedIdList, dataSource } = nextProps
+    const { selectedRows: prevSelectedRows, show } = prevState
+
+    // 初始化数据，需要外界获取好市级数据
+    // 从关闭到打开，每次都要重新获取一遍数据，为了保证准确，也为了防止外界强行更换了数据
+    if (!show && selectedIdList.length >= 1 && dataSource.length && prevSelectedRows[0] && (
+      !prevSelectedRows[0].id
+    )) {
+      let oneId = selectedIdList[0]
+      const rows = dataSource.filter(item => item.id === oneId)
+      if (rows) {
+        const { selectedRows, currentLevel } = getSelectedRows(nextProps)
+
+        return {
+          currentLevel,
+          selectedRows
+        }
+      }
+    }
+
+    return null
+  }
+
+
   
   // TODO 这里要不要改一下？
   pickerStatusChange = (show: boolean) => {
@@ -179,6 +205,7 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   componentDidUpdate(prevProps: AddressProps, prevState: AddressState) {
     const { show } = this.state
 
+    console.log('prevState.currentLevel !== this.state.currentLevel :', prevState.currentLevel, this.state.currentLevel);
     // 更换层级时执行
     if (show && prevProps && prevState.currentLevel !== this.state.currentLevel) {
 
@@ -207,6 +234,8 @@ export default class AddressPicker extends React.Component<AddressProps, Address
   hide = () => {
     this.setState({
       // 关掉后重置数据
+      selectedRows: [{}],
+      currentLevel: -1,
       show: false
     }, () => this.pickerStatusChange(this.state.show))
   }
