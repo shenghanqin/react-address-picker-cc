@@ -1,6 +1,6 @@
 {
   "name": "react-address-picker-cc-example",
-  "homepage": "http://www.xiaoxili.com/react-address-picker/",
+  "homepage": "http://www.xiaoxili.com/react-address-picker-cc/",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
     "axios": "^0.18.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
-    "react-address-picker": "file:..",
+    "react-address-picker-cc": "file:..",
     "react-dom": "^16.4.1",
     "react-scripts": "^1.1.4"
   },
